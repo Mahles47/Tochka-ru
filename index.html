@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Точка Ру А1 — تعلّم الروسية</title>
+<meta name="theme-color" content="#f5f5f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Точка Ру">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="تطبيق تفاعلي لتعلّم اللغة الروسية — المستوى A1">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQyIiBmaWxsPSIjNDMzOGNhIi8+PHRleHQgeD0iOTYiIHk9IjEyOCIgZm9udC1zaXplPSIxMTAiIGZvbnQtZmFtaWx5PSItYXBwbGUtc3lzdGVtLEludGVyLHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPtCiPC90ZXh0Pjwvc3ZnPg==">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f5f7;
+  --card:#ffffff;
+  --card-2:#fbfbfd;
+  --primary:#4338ca;
+  --primary-dim:#4f46e5;
+  --primary-tint:#eef0ff;
+  --success:#34c759;
+  --success-tint:#e8f9ec;
+  --error:#ff3b30;
+  --error-tint:#ffefee;
+  --gold:#d4a017;
+  --gold-tint:#fbf3dc;
+  --text:#1d1d1f;
+  --text-2:#6e6e73;
+  --text-3:#a1a1a6;
+  --border:rgba(0,0,0,0.07);
+  --radius-lg:20px;
+  --radius-md:16px;
+  --radius-sm:11px;
+  --shadow:0 4px 24px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-lift:0 12px 32px rgba(67,56,202,0.18);
+  --safe-t:env(safe-area-inset-top);
+  --safe-b:env(safe-area-inset-bottom);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#000000;
+    --card:#1c1c1e;
+    --card-2:#161618;
+    --primary:#6366f1;
+    --primary-dim:#818cf8;
+    --primary-tint:#211f3a;
+    --success:#30d158;
+    --success-tint:#0f2a17;
+    --error:#ff453a;
+    --error-tint:#331311;
+    --gold:#e8c04c;
+    --gold-tint:#2b230f;
+    --text:#f5f5f7;
+    --text-2:#a1a1a6;
+    --text-3:#6e6e73;
+    --border:rgba(255,255,255,0.09);
+    --shadow:0 4px 24px rgba(0,0,0,0.4);
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html{ -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain; }
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter','-apple-system',BlinkMacSystemFont,'SF Pro Display',sans-serif;
+  overscroll-behavior-y:contain;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+.rus{ font-family:'Inter','-apple-system',sans-serif; direction:ltr; unicode-bidi:isolate; }
+.ara{ font-family:'Tajawal','-apple-system',sans-serif; direction:rtl; unicode-bidi:isolate; }
+button{ font-family:inherit; }
+::selection{ background:var(--primary-tint); }
+#app{
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  background:var(--bg);
+  overflow-x:hidden;
+}
+.screen{ display:flex; flex-direction:column; flex:1; }
+@keyframes fadeIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+@keyframes popIn{ from{opacity:0; transform:scale(.82);} to{opacity:1; transform:scale(1);} }
+@keyframes pop{ from{opacity:0; transform:scale(.7);} to{opacity:1; transform:scale(1);} }
+@keyframes shakeX{ 10%,90%{transform:translateX(-1px);} 20%,80%{transform:translateX(2px);} 30%,50%,70%{transform:translateX(-4px);} 40%,60%{transform:translateX(4px);} }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+.shake{ animation:shakeX .5s; }
+.fade-in{ animation:fadeIn .35s cubic-bezier(.2,.8,.2,1); }
+
+/* ---------- Top bar ---------- */
+.topbar{
+  padding:calc(14px + var(--safe-t)) 18px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid var(--border);
+}
+.topbar-title{ display:flex; flex-direction:column; gap:1px; min-width:0; align-items:center; text-align:center; flex:1; border:none; background:none; cursor:pointer; padding:2px 4px; }
+.topbar-title h1{ font-size:18px; font-weight:800; margin:0; letter-spacing:-.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; color:var(--text); display:flex; align-items:center; gap:4px; }
+.topbar-title h1 svg{ width:13px; height:13px; color:var(--text-3); flex-shrink:0; }
+.topbar-title span{ font-size:11.5px; color:var(--text-2); font-weight:500; }
+.icon-btn{
+  width:38px; height:38px; border-radius:50%;
+  border:none; background:var(--card);
+  box-shadow:var(--shadow);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--primary); cursor:pointer; flex-shrink:0;
+  transition:transform .15s ease;
+}
+.icon-btn:active{ transform:scale(.85); }
+.icon-btn svg{ width:19px; height:19px; }
+.streak-mini{
+  display:flex; align-items:center; gap:4px; background:var(--gold-tint); color:var(--gold);
+  border-radius:16px; padding:8px 11px; font-size:12.5px; font-weight:800; flex-shrink:0;
+  border:1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+}
+.streak-mini svg{ width:13px; height:13px; }
+
+/* ---------- Loading / error states ---------- */
+.state-block{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:80px 24px; flex:1; }
+.spinner{ width:38px; height:38px; border-radius:50%; border:3px solid var(--border); border-top-color:var(--primary); animation:spin .8s linear infinite; margin-bottom:18px; }
+.state-block h3{ font-size:17px; font-weight:800; margin:0 0 8px; }
+.state-block p{ font-size:13.5px; color:var(--text-2); margin:0 0 20px; line-height:1.6; max-width:280px; }
+.state-block .err-icon{ width:60px; height:60px; border-radius:50%; background:var(--error-tint); color:var(--error); display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+.state-block .err-icon svg{ width:26px; height:26px; }
+
+/* ---------- Progress ring + streak ---------- */
+.stats-row{ display:flex; align-items:center; gap:10px; padding:2px 18px 16px; }
+.ring-wrap{ position:relative; width:52px; height:52px; flex-shrink:0; }
+.ring-wrap svg{ width:52px; height:52px; transform:rotate(-90deg); }
+.ring-bg{ fill:none; stroke:var(--border); stroke-width:4.5; }
+.ring-fg{ fill:none; stroke:var(--primary); stroke-width:4.5; stroke-linecap:round; transition:stroke-dasharray .6s cubic-bezier(.2,.8,.2,1); }
+.ring-label{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:var(--primary); }
+.stats-text{ flex:1; min-width:0; }
+.stats-text .st-main{ font-size:14px; font-weight:700; }
+.stats-text .st-sub{ font-size:11.5px; color:var(--text-2); }
+.streak-pill{
+  display:flex; align-items:center; gap:5px; background:var(--gold-tint); color:var(--gold);
+  border-radius:20px; padding:7px 13px; font-size:13px; font-weight:800; flex-shrink:0;
+  border:1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+}
+.streak-pill svg{ width:15px; height:15px; }
+
+/* ---------- Generic ---------- */
+.content{ padding:16px 18px calc(28px + var(--safe-b)); flex:1; display:flex; flex-direction:column; }
+.card{
+  background:var(--card);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow);
+  padding:20px;
+  border:1px solid var(--border);
+}
+.btn{
+  border:none; border-radius:14px; padding:15px 20px; font-size:16px; font-weight:700;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:transform .12s ease, opacity .12s ease; width:100%;
+}
+.btn:active{ transform:scale(.97); }
+.btn-primary{ background:var(--primary); color:#fff; box-shadow:0 8px 20px rgba(67,56,202,.28); }
+.btn-secondary{ background:var(--primary-tint); color:var(--primary); }
+.btn-ghost{ background:transparent; color:var(--primary); }
+.btn-sm{ padding:10px 16px; font-size:14px; width:auto; border-radius:12px; }
+.btn:disabled{ opacity:.4; pointer-events:none; }
+
+/* ---------- Lesson selector sheet ---------- */
+.lesson-row{
+  background:var(--card);
+  border-radius:var(--radius-md);
+  padding:16px 16px;
+  display:flex; align-items:center; gap:13px;
+  margin-bottom:10px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:transform .12s ease;
+  position:relative;
+}
+.lesson-row:active{ transform:scale(.98); }
+.lesson-row.current{ border-color:var(--primary); background:var(--primary-tint); }
+.lesson-num{
+  width:40px; height:40px; border-radius:12px; background:var(--primary-tint); color:var(--primary);
+  display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; flex-shrink:0;
+}
+.lesson-num.done{ background:var(--success-tint); color:var(--success); }
+.lesson-info{ flex:1; min-width:0; }
+.lesson-info .lid{ font-weight:700; font-size:15px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; direction:ltr; text-align:right; }
+.lesson-info .lpreview{ font-size:12.5px; color:var(--text-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; direction:ltr; text-align:right; }
+.chev{ color:var(--text-3); flex-shrink:0; }
+.chev svg{ width:16px; height:16px; }
+.search-bar{
+  display:flex; align-items:center; gap:8px; background:var(--card-2); border-radius:13px;
+  padding:11px 14px; margin-bottom:16px; border:1px solid var(--border);
+}
+.search-bar svg{ width:17px; height:17px; color:var(--text-3); flex-shrink:0; }
+.search-bar input{ border:none; outline:none; background:transparent; flex:1; font-size:15px; color:var(--text); font-family:inherit; }
+.empty-state{ text-align:center; padding:40px 20px; color:var(--text-2); }
+.empty-state svg{ width:44px; height:44px; color:var(--text-3); margin-bottom:10px; }
+.sheet-title{ font-size:18px; font-weight:800; margin:0 0 16px; text-align:center; }
+.sheet-list-scroll{ max-height:52vh; overflow-y:auto; padding:2px 2px 4px; -webkit-overflow-scrolling:touch; }
+
+/* ---------- Segmented control ---------- */
+.segmented{
+  display:flex; background:var(--card-2); border-radius:13px; padding:4px; gap:3px;
+  border:1px solid var(--border); margin-bottom:18px;
+}
+.segmented button{
+  flex:1; border:none; background:transparent; padding:9px 6px; border-radius:10px;
+  font-size:13.5px; font-weight:700; color:var(--text-2); cursor:pointer; transition:all .2s;
+}
+.segmented button.active{ background:var(--card); color:var(--primary); box-shadow:0 2px 8px rgba(0,0,0,.08); }
+
+/* ---------- Unified Conversational Card Timeline ---------- */
+#pane-transcript{ direction:ltr; position:relative; }
+.timeline-item{ position:relative; padding-left:34px; margin-bottom:18px; animation:popIn .3s cubic-bezier(.2,.9,.3,1.1); }
+.timeline-item:last-child{ margin-bottom:0; }
+.timeline-dot{
+  position:absolute; left:0; top:4px; width:24px; height:24px; border-radius:50%;
+  background:var(--primary-tint); color:var(--primary); font-size:11px; font-weight:800;
+  display:flex; align-items:center; justify-content:center;
+}
+.timeline-item:not(:last-child)::before{
+  content:''; position:absolute; left:12px; top:28px; bottom:-18px; width:2px; background:var(--border);
+}
+.convo-card{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow); overflow:hidden; }
+.convo-card .rus-part{ padding:14px 16px 12px; font-size:16px; font-weight:600; line-height:1.6; color:var(--text); border-right:3px solid var(--primary); }
+.convo-card .divider{ height:1px; background:var(--border); margin:0 16px; }
+.convo-card .ara-part{ padding:12px 16px 14px; font-size:14.5px; line-height:1.7; color:var(--text-2); background:var(--card-2); }
+.convo-card p{ margin:0 0 6px; }
+.convo-card p:last-child{ margin-bottom:0; }
+
+/* ---------- Audio player ---------- */
+.audio-card{ text-align:center; }
+.audio-card .waveform-icon{
+  width:96px; height:96px; border-radius:50%; margin:0 auto 18px; background:var(--primary-tint);
+  display:flex; align-items:center; justify-content:center; color:var(--primary);
+}
+.audio-card .waveform-icon svg{ width:40px; height:40px; }
+.audio-card h3{ font-size:16px; font-weight:700; margin:0 0 6px; }
+.audio-card p.hint{ font-size:13px; color:var(--text-2); margin:0 0 6px; line-height:1.6; }
+.audio-unavailable{
+  display:none; align-items:center; gap:8px; justify-content:center; background:var(--error-tint); color:var(--error);
+  border-radius:12px; padding:11px 14px; font-size:13px; font-weight:600; margin-top:14px;
+}
+.audio-unavailable.show{ display:flex; }
+.audio-unavailable svg{ width:16px; height:16px; flex-shrink:0; }
+.audio-loading{ display:none; align-items:center; gap:8px; justify-content:center; color:var(--text-2); font-size:13px; font-weight:600; margin-top:14px; }
+.audio-loading.show{ display:flex; }
+.audio-loading .spinner{ width:16px; height:16px; border-width:2px; margin:0; }
+.player{ display:none; }
+.player.ready{ display:block; }
+.player-controls{ display:flex; align-items:center; gap:14px; margin-top:6px; }
+.play-btn{
+  width:56px; height:56px; border-radius:50%; background:var(--primary); color:#fff; border:none;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer;
+  box-shadow:0 8px 20px rgba(67,56,202,.3);
+}
+.play-btn:active{ transform:scale(.9); }
+.play-btn svg{ width:22px; height:22px; }
+.seek-wrap{ flex:1; padding:0 8px; box-sizing:border-box; }
+.seek-bar{ width:100%; height:6px; border-radius:3px; background:var(--border); position:relative; cursor:pointer; touch-action:none; box-sizing:border-box; }
+.seek-fill{ position:absolute; top:0; bottom:0; left:0; width:0%; background:var(--primary); border-radius:3px; pointer-events:none; will-change:width; }
+.seek-knob{
+  position:absolute; top:50%; width:16px; height:16px; border-radius:50%; background:var(--primary);
+  transform:translate(-50%,-50%); left:0%; box-shadow:0 2px 6px rgba(0,0,0,.25); border:2px solid #fff;
+  pointer-events:none; will-change:left;
+}
+.time-row{ display:flex; justify-content:space-between; font-size:11.5px; color:var(--text-2); margin-top:6px; font-variant-numeric:tabular-nums; padding:0 8px; }
+.speed-switch-label{ font-size:12px; font-weight:700; color:var(--text-2); margin:18px 0 8px; text-align:center; }
+.speed-switch{ display:flex; background:var(--card-2); border:1px solid var(--border); border-radius:13px; padding:4px; gap:3px; }
+.speed-chip{ flex:1; padding:9px 8px; border-radius:10px; background:transparent; border:none; font-size:13px; font-weight:800; color:var(--text-2); cursor:pointer; transition:all .2s; }
+.speed-chip.active{ background:var(--primary); color:#fff; box-shadow:0 3px 10px rgba(67,56,202,.3); }
+.speed-chip:active{ transform:scale(.93); }
+
+/* ---------- Audio Upload Box ---------- */
+.upload-section{ margin-top:20px; border-top:1px solid var(--border); padding-top:18px; }
+.upload-label{ font-size:12px; font-weight:700; color:var(--text-2); text-align:center; margin-bottom:10px; letter-spacing:.2px; }
+.upload-dropzone{
+  border:2px dashed var(--border); border-radius:var(--radius-md);
+  padding:20px 16px; display:flex; flex-direction:column; align-items:center;
+  gap:8px; cursor:pointer; transition:border-color .2s, background .2s;
+  background:var(--card-2); position:relative; overflow:hidden;
+}
+.upload-dropzone:hover{ border-color:var(--primary); background:var(--primary-tint); }
+.upload-dropzone.drag-over{ border-color:var(--primary); background:var(--primary-tint); transform:scale(1.01); }
+.upload-dropzone input[type=file]{ position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+.upload-dropzone svg{ width:28px; height:28px; color:var(--primary); }
+.upload-dropzone .dz-title{ font-size:14px; font-weight:700; color:var(--text); }
+.upload-dropzone .dz-sub{ font-size:12px; color:var(--text-2); }
+.upload-stored{
+  display:flex; align-items:center; gap:10px; background:var(--success-tint);
+  border:1px solid color-mix(in srgb, var(--success) 35%, transparent);
+  border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:10px;
+}
+.upload-stored svg{ width:18px; height:18px; color:var(--success); flex-shrink:0; }
+.upload-stored-info{ flex:1; min-width:0; }
+.upload-stored-info .us-name{ font-size:13px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.upload-stored-info .us-sub{ font-size:11px; color:var(--text-2); }
+.upload-del-btn{
+  width:30px; height:30px; border-radius:50%; border:none; background:var(--error-tint);
+  color:var(--error); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; flex-shrink:0; transition:transform .15s;
+}
+.upload-del-btn:active{ transform:scale(.85); }
+.upload-del-btn svg{ width:14px; height:14px; }
+
+/* ---------- Quiz ---------- */
+.quiz-body{ min-height:220px; }
+.quiz-header-row{ display:flex; justify-content:flex-end; align-items:center; margin-bottom:14px; }
+.score-pill{
+  display:inline-flex; align-items:center; gap:6px; background:var(--card); border:1px solid var(--border);
+  border-radius:20px; padding:6px 13px; font-size:12.5px; font-weight:700; color:var(--text-2); box-shadow:var(--shadow);
+}
+.score-pill svg{ width:13px; height:13px; color:var(--primary); }
+
+.quiz-progress{ margin-bottom:16px; }
+.quiz-progress-label{ font-size:12.5px; font-weight:800; color:var(--text-2); margin-bottom:8px; text-align:center; }
+.quiz-progress-track{ height:5px; background:var(--border); border-radius:3px; overflow:hidden; }
+.quiz-progress-fill{ height:100%; background:var(--primary); border-radius:3px; transition:width .45s cubic-bezier(.2,.8,.2,1); }
+.question-type-tag{
+  display:inline-block; font-size:11px; font-weight:800; color:var(--primary); background:var(--primary-tint);
+  border-radius:8px; padding:4px 10px; margin-bottom:10px;
+}
+
+.prompt-sentence{
+  direction:ltr; text-align:center; font-size:18px; font-weight:600; line-height:1.7;
+  padding:20px 14px; background:var(--card); border-radius:var(--radius-md); box-shadow:var(--shadow);
+  border:1px solid var(--border); margin-bottom:18px;
+}
+.blank-tag{ color:var(--primary); font-weight:800; border-bottom:2px dashed var(--primary); padding:0 3px; }
+
+.capsule-row{ display:flex; flex-wrap:wrap; gap:8px; direction:ltr; }
+.answer-row{ min-height:52px; background:var(--card-2); border:1.5px dashed var(--border); border-radius:14px; padding:10px; margin-bottom:16px; }
+.bank-row{ margin-bottom:6px; }
+.bank-row.locked, .answer-row.locked{ pointer-events:none; opacity:.85; }
+.capsule{
+  padding:10px 15px; background:var(--card); border:1px solid var(--border); border-radius:12px;
+  font-size:15px; font-weight:600; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.04);
+  transition:transform .12s ease, opacity .15s; animation:pop .25s cubic-bezier(.2,.9,.3,1.2);
+}
+.capsule:active{ transform:scale(.9); }
+.capsule.placed{ background:var(--primary-tint); color:var(--primary); border-color:transparent; }
+.capsule.correct{ background:var(--success-tint); color:var(--success); border-color:var(--success); }
+.capsule.wrong{ background:var(--error-tint); color:var(--error); border-color:var(--error); }
+
+.choice-grid{ display:flex; flex-direction:column; gap:10px; }
+.choice-card{
+  padding:15px 18px; background:var(--card); border:1.5px solid var(--border); border-radius:14px;
+  font-size:16px; font-weight:600; text-align:center; cursor:pointer; direction:ltr; box-shadow:var(--shadow);
+  transition:transform .1s;
+}
+.choice-card:active{ transform:scale(.96); }
+.choice-card.correct{ background:var(--success-tint); border-color:var(--success); color:var(--success); }
+.choice-card.wrong{ background:var(--error-tint); border-color:var(--error); color:var(--error); }
+.choice-card.disabled{ pointer-events:none; }
+
+.dictation-input-wrap{ position:relative; margin-bottom:14px; }
+.dictation-input{
+  width:100%; padding:16px 18px; border-radius:14px; border:1.5px solid var(--border); background:var(--card);
+  font-size:17px; font-weight:600; text-align:center; direction:ltr; color:var(--text); outline:none;
+  transition:border-color .2s; font-family:'Inter',sans-serif;
+}
+.dictation-input:focus{ border-color:var(--primary); }
+.dictation-input.correct{ border-color:var(--success); background:var(--success-tint); color:var(--success); }
+.dictation-input.wrong{ border-color:var(--error); background:var(--error-tint); color:var(--error); }
+
+.feedback-banner{
+  display:none; align-items:center; gap:10px; padding:13px 16px; border-radius:13px; font-weight:700;
+  font-size:14px; margin-bottom:12px; animation:pop .3s;
+}
+.feedback-banner.show{ display:flex; }
+.feedback-banner.ok{ background:var(--success-tint); color:var(--success); }
+.feedback-banner.bad{ background:var(--error-tint); color:var(--error); }
+.feedback-banner svg{ width:19px; height:19px; flex-shrink:0; }
+
+/* Slide-down explanation card (shown on wrong answers) */
+.explanation-wrap{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .4s cubic-bezier(.2,.8,.2,1); margin-bottom:2px; }
+.explanation-wrap.open{ grid-template-rows:1fr; margin-bottom:14px; }
+.explanation-inner{ overflow:hidden; }
+.explanation-card{
+  background:var(--gold-tint); border:1px solid color-mix(in srgb, var(--gold) 35%, transparent);
+  border-radius:14px; padding:14px 16px; direction:rtl;
+}
+.explanation-label{ font-size:11.5px; font-weight:800; color:var(--gold); margin-bottom:6px; display:flex; align-items:center; gap:5px; }
+.explanation-text{ font-size:14px; line-height:1.8; color:var(--text); }
+
+.quiz-actions{ display:flex; gap:10px; margin-top:16px; }
+
+.session-complete{ text-align:center; padding:32px 20px; }
+.session-complete .modal-icon{ margin:0 auto 16px; }
+.session-complete h3{ font-size:18px; font-weight:800; margin:0 0 8px; }
+.session-complete p{ color:var(--text-2); font-size:14px; margin:0 0 22px; }
+
+.flashcard{
+  background:var(--card); border-radius:var(--radius-lg); box-shadow:var(--shadow); border:1px solid var(--border);
+  padding:26px 20px; text-align:center; margin-bottom:16px; animation:popIn .3s cubic-bezier(.2,.9,.3,1.1);
+}
+.flashcard .fc-label{ font-size:11.5px; font-weight:800; color:var(--text-3); text-transform:uppercase; letter-spacing:.06em; margin-bottom:12px; }
+.flashcard .fc-context{ direction:ltr; font-size:17px; font-weight:600; line-height:1.7; margin-bottom:6px; }
+.review-empty{ text-align:center; padding:50px 20px; }
+.review-empty .ok-circle{
+  width:76px; height:76px; border-radius:50%; background:var(--success-tint); color:var(--success);
+  display:flex; align-items:center; justify-content:center; margin:0 auto 16px;
+}
+.review-empty .ok-circle svg{ width:34px; height:34px; }
+.review-empty h3{ font-size:17px; font-weight:800; margin:0 0 6px; }
+.review-empty p{ font-size:13.5px; color:var(--text-2); margin:0; }
+
+.toast{
+  position:fixed; bottom:calc(24px + var(--safe-b)); left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--text); color:var(--bg); padding:12px 20px; border-radius:30px; font-size:13.5px; font-weight:600;
+  opacity:0; pointer-events:none; transition:all .3s cubic-bezier(.2,.8,.2,1); z-index:100; max-width:90%; text-align:center;
+  box-shadow:0 8px 24px rgba(0,0,0,.2);
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ---------- Modal / Sheet overlay ---------- */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.42); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+  display:none; align-items:flex-end; justify-content:center; z-index:200; padding:0;
+}
+.modal-overlay.show{ display:flex; animation:overlayIn .25s; }
+.modal-overlay.blur-strong{ backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); background:rgba(0,0,0,.5); }
+@keyframes overlayIn{ from{opacity:0;} to{opacity:1;} }
+.modal-box{
+  width:100%; max-width:480px; background:var(--card); border-radius:26px 26px 0 0; padding:30px 26px calc(26px + var(--safe-b));
+  text-align:center; box-shadow:0 -12px 40px rgba(0,0,0,.2); animation:modalUp .35s cubic-bezier(.2,.9,.25,1.05);
+  max-height:88vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+}
+.modal-box.sheet-tall{ text-align:right; }
+@keyframes modalUp{ from{transform:translateY(60px); opacity:0;} to{transform:translateY(0); opacity:1;} }
+.modal-icon{ width:68px; height:68px; border-radius:50%; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; }
+.modal-icon svg{ width:30px; height:30px; }
+.modal-icon.success{ background:var(--success-tint); color:var(--success); }
+.modal-icon.error{ background:var(--error-tint); color:var(--error); }
+.modal-icon.info{ background:var(--primary-tint); color:var(--primary); }
+.modal-icon.gold{ background:var(--gold-tint); color:var(--gold); }
+.modal-box h3{ font-size:19px; font-weight:800; margin:0 0 8px; }
+.modal-box p{ font-size:14.5px; color:var(--text-2); line-height:1.6; margin:0 0 22px; }
+.modal-actions{ display:flex; gap:10px; }
+
+/* Scoreboard modal */
+.scoreboard-ring-wrap{ position:relative; width:110px; height:110px; margin:0 auto 18px; }
+.scoreboard-ring-wrap svg{ width:110px; height:110px; transform:rotate(-90deg); }
+.scoreboard-ring-label{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.scoreboard-ring-label .pct{ font-size:26px; font-weight:800; color:var(--primary); }
+.scoreboard-ring-label .lbl{ font-size:10.5px; color:var(--text-2); font-weight:700; }
+.scoreboard-breakdown{ display:flex; flex-direction:column; gap:8px; margin:18px 0 22px; text-align:right; }
+.scoreboard-row{ display:flex; align-items:center; justify-content:space-between; background:var(--card-2); border:1px solid var(--border); border-radius:12px; padding:11px 14px; font-size:13.5px; font-weight:700; }
+.scoreboard-row .label{ color:var(--text); }
+.scoreboard-row .value{ color:var(--text-2); font-variant-numeric:tabular-nums; }
+.mistakes-cta{
+  display:flex; align-items:center; justify-content:center; gap:8px; background:var(--error-tint); color:var(--error);
+  border:none; border-radius:14px; padding:14px; font-size:14.5px; font-weight:700; cursor:pointer; width:100%; margin-bottom:10px;
+}
+
+@media (min-width:480px){
+  .modal-overlay{ align-items:center; }
+  .modal-box{ border-radius:26px; max-width:380px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ MAIN SCREEN ============ -->
+  <section class="screen active" id="screen-main">
+    <div class="topbar">
+      <button class="icon-btn" id="btnOpenLessons" title="كل الدروس">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
+      </button>
+      <button class="topbar-title" id="lessonPickerTrigger">
+        <h1 id="detailTitle" class="rus">
+          <span id="detailTitleText">Точка Ру А1</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </h1>
+        <span id="detailSubtitle">جاري التحميل…</span>
+      </button>
+      <div class="streak-mini" id="streakMini">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1 1 2 2.5 2 4.5A5.5 5.5 0 0 1 11.5 21 6.5 6.5 0 0 1 5 14.5C5 9 9 7 12 2z"/></svg>
+        <span id="streakMiniCount">0</span>
+      </div>
+    </div>
+
+    <div class="content" id="mainContent">
+      <!-- Loading state -->
+      <div class="state-block" id="loadingState">
+        <div class="spinner"></div>
+        <h3>جاري تحميل الدروس</h3>
+        <p>بنجيب أحدث بيانات الدروس من الخادم…</p>
+      </div>
+
+      <!-- Error state -->
+      <div class="state-block" id="errorState" style="display:none">
+        <div class="err-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>تعذّر تحميل الدروس</h3>
+        <p id="errorStateMsg">تأكد أن ملف data.json موجود بجانب index.html، وأن التطبيق يعمل عبر خادم ويب (مثل GitHub Pages) وليس بفتح الملف مباشرة.</p>
+        <button class="btn btn-primary btn-sm" id="btnRetryLoad">إعادة المحاولة</button>
+      </div>
+
+      <!-- Lesson content -->
+      <div id="lessonContent" style="display:none">
+        <div class="segmented" id="detailSegmented">
+          <button data-tab="transcript" class="active">المحادثة</button>
+          <button data-tab="audio">الصوت</button>
+          <button data-tab="quiz">التمارين</button>
+        </div>
+
+        <div class="tab-pane" id="pane-transcript"></div>
+
+        <div class="tab-pane" id="pane-audio" style="display:none">
+          <div class="card audio-card">
+            <div class="waveform-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <h3>استمع إلى الدرس</h3>
+            <p class="hint">شغّل التسجيل الصوتي المرافق لهذا الدرس</p>
+            <div class="audio-loading" id="audioLoading"><div class="spinner"></div><span>جاري تحميل الصوت…</span></div>
+            <div class="audio-unavailable" id="audioUnavailable">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>الملف الصوتي غير متاح لهذا الدرس حاليًا</span>
+            </div>
+
+            <div class="player" id="playerWrap">
+              <div class="player-controls">
+                <button class="play-btn" id="playBtn">
+                  <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="seek-wrap">
+                  <div class="seek-bar" id="seekBar">
+                    <div class="seek-fill" id="seekFill"></div>
+                    <div class="seek-knob" id="seekKnob"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="time-row"><span id="curTime">0:00</span><span id="durTime">0:00</span></div>
+              <div class="speed-switch-label">سرعة التشغيل</div>
+              <div class="speed-switch" id="speedRow">
+                <button class="speed-chip" data-speed="0.5">×0.5</button>
+                <button class="speed-chip" data-speed="0.75">×0.75</button>
+                <button class="speed-chip active" data-speed="1">×1.0</button>
+              </div>
+            </div>
+            <audio id="audioEl" style="display:none" preload="metadata"></audio>
+
+            <!-- Upload section -->
+            <div class="upload-section">
+              <div class="upload-label">رفع ملف صوتي محلي</div>
+              <div id="uploadStoredBanner" style="display:none">
+                <div class="upload-stored">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  <div class="upload-stored-info">
+                    <div class="us-name" id="uploadStoredName">—</div>
+                    <div class="us-sub">محفوظ على جهازك ← يُشغَّل تلقائياً</div>
+                  </div>
+                  <button class="upload-del-btn" id="uploadDelBtn" title="حذف الصوت المحفوظ">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="upload-dropzone" id="uploadDropzone">
+                <input type="file" id="uploadInput" accept="audio/*">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <div class="dz-title">اختر ملف أو اسحبه هنا</div>
+                <div class="dz-sub">MP3 · WAV · M4A · OGG</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane" id="pane-quiz" style="display:none">
+          <div class="quiz-header-row">
+            <div class="score-pill" id="scorePill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span id="scoreText">0 / 0</span>
+            </div>
+          </div>
+          <div class="quiz-body" id="quizBody"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Lesson selector sheet -->
+<div class="modal-overlay" id="lessonSheetOverlay">
+  <div class="modal-box sheet-tall" id="lessonSheetBox">
+    <div class="sheet-title">اختر درسًا</div>
+    <div class="stats-row" style="padding:0 0 16px">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 52 52">
+          <circle class="ring-bg" cx="26" cy="26" r="21.5"></circle>
+          <circle class="ring-fg" id="ringFg" cx="26" cy="26" r="21.5" stroke-dasharray="0 135.1"></circle>
+        </svg>
+        <div class="ring-label" id="ringLabel">0%</div>
+      </div>
+      <div class="stats-text">
+        <div class="st-main" id="masteredText">0 من 0 دروس مُتقنة</div>
+        <div class="st-sub">استمر في التقدم يوميًا</div>
+      </div>
+      <div class="streak-pill" id="streakPill">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 4-3 5-3 9a3 3 0 0 0 6 0c1 1 2 2.5 2 4.5A5.5 5.5 0 0 1 11.5 21 6.5 6.5 0 0 1 5 14.5C5 9 9 7 12 2z"/></svg>
+        <span id="streakCount">0</span>
+      </div>
+    </div>
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="lessonSearch" placeholder="ابحث عن درس...">
+    </div>
+    <div class="sheet-list-scroll" id="lessonListWrap"></div>
+  </div>
+</div>
+
+<!-- Generic modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<!-- Scoreboard modal -->
+<div class="modal-overlay" id="scoreboardOverlay">
+  <div class="modal-box" id="scoreboardBox"></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/*
+ * Expected data.json schema (served alongside index.html on GitHub Pages):
+ * [
+ *   {
+ *     "id": "Урок 1.1",
+ *     "audio": "audio/lesson-1-1.mp3",      // optional — falls back to audio/<slug>.mp3
+ *     "rus": "Привет, я Клаус.\nКак тебя зовут?",
+ *     "ara": "إزيك، أنا كلاوس.\nإيه اسمك؟",
+ *     "questions": [
+ *       { "type":"grammar",   "sentence":"Я ___ студент.", "choices":["есть","—","был"], "answer":"—", "explanation":"..." },
+ *       { "type":"sorting",   "words":["Я","изучаю","русский","язык"], "explanation":"..." },
+ *       { "type":"dictation", "sentence":"Меня зовут ___.", "answer":"Анна", "explanation":"..." }
+ *     ]
+ *   }
+ * ]
+ */
+
+/* ===================== STATE ===================== */
+const State = {
+  lessons: [],
+  currentLesson: null,
+  session: null,          // { index, total, correct, results:[{type,correct}] }
+  quizData: { current: null },
+  scores: {},
+  mistakes: {},
+  activity: { lastDate: null, streak: 0 }
+};
+
+const TYPE_LABELS = { grammar:'قواعد', sorting:'ترتيب', dictation:'إملاء' };
+
+/* ===================== UTIL ===================== */
+function $(sel, ctx){ return (ctx||document).querySelector(sel); }
+function $all(sel, ctx){ return Array.from((ctx||document).querySelectorAll(sel)); }
+function toast(msg, ms){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast._tid);
+  toast._tid = setTimeout(()=>t.classList.remove('show'), ms||2200);
+}
+function normalizeWord(w){
+  return (w||'').toLowerCase().replace(/^[«»"'“”„\-—.,!?;:()\[\]]+|[«»"'“”„\-—.,!?;:()\[\]]+$/g,'').trim();
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4); }
+
+function splitLinesStrict(text){
+  if(!text) return [];
+  const lines = String(text).split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  return lines.length ? lines : [String(text).trim()];
+}
+
+/* ===================== LESSON ID NORMALIZATION ===================== */
+function normalizeLessonId(raw){
+  let display = String(raw || '').replace(/\s{2,}/g, ' ').trim();
+  display = display.replace(/(\d{1,2})\s*[\s.]\s*(\d{1,2})(?!\d)/g, function(m, a, b){
+    return a + '.' + b;
+  });
+  display = display.replace(/\s{2,}/g, ' ').trim();
+  const afterUrok = display.match(/Урок\s*([\d.]+)/i);
+  let sortKey;
+  if(afterUrok){
+    sortKey = afterUrok[1].split('.').filter(Boolean).map(Number);
+  }else{
+    const fallback = display.match(/\d+(\.\d+)?/);
+    sortKey = fallback ? fallback[0].split('.').map(Number) : [0];
+  }
+  return { display, sortKey };
+}
+function compareSortKeys(a, b){
+  const len = Math.max(a.length, b.length);
+  for(let i=0;i<len;i++){
+    const av = a[i]===undefined ? -1 : a[i];
+    const bv = b[i]===undefined ? -1 : b[i];
+    if(av !== bv) return av - bv;
+  }
+  return 0;
+}
+
+/* ===================== QUESTION VALIDATION ===================== */
+function sanitizeQuestions(raw){
+  if(!Array.isArray(raw)) return [];
+  const out = [];
+  raw.forEach(q=>{
+    if(!q || typeof q !== 'object') return;
+    const type = q.type;
+    const explanation = String(q.explanation || '').trim();
+    if(type === 'grammar'){
+      // Support old format (sentence/answer) and new format (question/correct)
+      const sentence = q.sentence || q.question;
+      const answer   = q.answer   || q.correct;
+      if(!sentence || !Array.isArray(q.choices) || q.choices.length < 2 || !answer) return;
+      out.push({ type, sentence:String(sentence), choices:q.choices.map(String), answer:String(answer), explanation });
+    }else if(type === 'sorting'){
+      let words, answer;
+      if(Array.isArray(q.words) && q.words.length >= 2){
+        // Old format: words[] + answer[]
+        words  = q.words.map(String);
+        answer = Array.isArray(q.answer) && q.answer.length ? q.answer.map(String) : words;
+      }else if(typeof q.question === 'string' && q.question.trim()){
+        // New format: question = space-separated word bank, correct = correct sentence string
+        words  = q.question.trim().split(/\s+/);
+        const raw_ans = q.correct || q.answer || '';
+        answer = typeof raw_ans === 'string' ? raw_ans.trim().split(/\s+/) : words.slice();
+      }else{
+        return;
+      }
+      if(words.length < 2) return;
+      out.push({ type, words, answer, explanation });
+    }else if(type === 'dictation'){
+      // Support old format (sentence/answer) and new format (question/correct)
+      const sentence = q.sentence || q.question;
+      const answer   = q.answer   || q.correct;
+      if(!sentence || !answer) return;
+      out.push({ type, sentence:String(sentence), answer:String(answer), explanation });
+    }
+    // unknown types are silently skipped — keeps the engine forward-compatible
+  });
+  return out;
+}
+
+/* ===================== DATA FETCHING (GitHub Pages architecture) ===================== */
+function fetchAndLoadLessons(){
+  showLoadingState();
+  fetch('data.json', { cache:'no-cache' })
+    .then(res=>{
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(data=> processLessonsData(data, true))
+    .catch(err=>{
+      // Fall back to the last successfully cached copy (e.g. offline after first visit)
+      const cached = readCachedLessons();
+      if(cached && cached.length){
+        processLessonsData(cached, false);
+        toast('تعمل الآن من نسخة محفوظة محليًا (بدون اتصال)');
+      }else{
+        showErrorState(err);
+      }
+    });
+}
+function readCachedLessons(){
+  try{
+    const raw = localStorage.getItem('tochkaru_lessons_cache');
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function writeCachedLessons(rawData){
+  try{ localStorage.setItem('tochkaru_lessons_cache', JSON.stringify(rawData)); }catch(e){}
+}
+
+function processLessonsData(data, fromNetwork){
+  if(!Array.isArray(data) || data.length === 0){
+    showErrorState(new Error('empty'));
+    return;
+  }
+  const badIndex = data.findIndex(it => !it || typeof it !== 'object' || !it.id || !it.rus || !it.ara);
+  if(badIndex !== -1){
+    showErrorState(new Error('missing-fields:' + (badIndex+1)));
+    return;
+  }
+  State.lessons = data.map((it, idx)=>{
+    const norm = normalizeLessonId(it.id);
+    const rus = String(it.rus).replace(/[ \t]{2,}/g,' ').trim();
+    const ara = String(it.ara).replace(/[ \t]{2,}/g,' ').trim();
+    return {
+      _idx: idx,
+      rawId: String(it.id),
+      id: norm.display,
+      sortKey: norm.sortKey,
+      rus, ara,
+      audio: it.audio ? String(it.audio) : '',
+      questions: sanitizeQuestions(it.questions)
+    };
+  });
+  State.lessons.sort((a,b)=> compareSortKeys(a.sortKey, b.sortKey));
+  State.lessons.forEach((l,i)=> l._idx = i);
+
+  if(fromNetwork) writeCachedLessons(data);
+
+  loadPersistedProgress();
+  renderLessonSheetList();
+  updateStatsHeader();
+  showLessonContent();
+  openLesson(State.lessons[0]);
+}
+
+function showLoadingState(){
+  $('#loadingState').style.display = 'flex';
+  $('#errorState').style.display = 'none';
+  $('#lessonContent').style.display = 'none';
+}
+function showErrorState(err){
+  $('#loadingState').style.display = 'none';
+  $('#lessonContent').style.display = 'none';
+  const box = $('#errorState');
+  box.style.display = 'flex';
+  const msg = $('#errorStateMsg');
+  if(String(err && err.message).indexOf('missing-fields') === 0){
+    const n = String(err.message).split(':')[1];
+    msg.textContent = 'الدرس رقم ' + n + ' في data.json ينقصه أحد الحقول المطلوبة: id أو rus أو ara.';
+  }else if(location.protocol === 'file:'){
+    msg.textContent = 'التطبيق مفتوح مباشرة من الملفات (file://) وهذا يمنع تحميل data.json. شغّله عبر خادم ويب محلي أو ارفعه على GitHub Pages.';
+  }else{
+    msg.textContent = 'تأكد أن ملف data.json موجود بجانب index.html في نفس المستودع، وأن الاتصال بالإنترنت متاح عند أول تشغيل.';
+  }
+}
+function showLessonContent(){
+  $('#loadingState').style.display = 'none';
+  $('#errorState').style.display = 'none';
+  $('#lessonContent').style.display = 'block';
+  $('#lessonContent').classList.add('fade-in');
+}
+$('#btnRetryLoad').addEventListener('click', fetchAndLoadLessons);
+
+function loadPersistedProgress(){
+  try{
+    const s = localStorage.getItem('tochkaru_scores');
+    if(s) State.scores = JSON.parse(s);
+    const m = localStorage.getItem('tochkaru_mistakes');
+    if(m) State.mistakes = JSON.parse(m);
+    const a = localStorage.getItem('tochkaru_activity');
+    if(a) State.activity = JSON.parse(a);
+  }catch(e){}
+  updateStreakOnOpen();
+}
+function saveScores(){ try{ localStorage.setItem('tochkaru_scores', JSON.stringify(State.scores)); }catch(e){} }
+function saveMistakes(){ try{ localStorage.setItem('tochkaru_mistakes', JSON.stringify(State.mistakes)); }catch(e){} }
+function saveActivity(){ try{ localStorage.setItem('tochkaru_activity', JSON.stringify(State.activity)); }catch(e){} }
+
+/* ===================== STREAK & PROGRESS ===================== */
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function daysBetween(d1, d2){ return Math.round((new Date(d2) - new Date(d1)) / 86400000); }
+function updateStreakOnOpen(){
+  const today = todayStr();
+  if(!State.activity.lastDate){
+    State.activity = { lastDate: today, streak: 1 };
+  }else if(State.activity.lastDate === today){
+    // no change
+  }else{
+    const gap = daysBetween(State.activity.lastDate, today);
+    State.activity.streak = (gap === 1) ? (State.activity.streak + 1) : 1;
+    State.activity.lastDate = today;
+  }
+  saveActivity();
+  $('#streakMiniCount').textContent = State.activity.streak || 0;
+}
+function isLessonMastered(lessonId){
+  const s = State.scores[lessonId];
+  if(!s || s.total < 3) return false;
+  const pending = (State.mistakes[lessonId] || []).length;
+  return (s.correct / s.total) >= 0.8 && pending === 0;
+}
+function updateStatsHeader(){
+  const total = State.lessons.length;
+  const mastered = State.lessons.filter(l => isLessonMastered(l.id)).length;
+  const pct = total ? Math.round((mastered/total)*100) : 0;
+  const circumference = 2 * Math.PI * 21.5;
+  $('#ringFg').setAttribute('stroke-dasharray', (circumference*pct/100).toFixed(1) + ' ' + circumference.toFixed(1));
+  $('#ringLabel').textContent = pct + '%';
+  $('#masteredText').textContent = mastered + ' من ' + total + ' دروس مُتقنة';
+  $('#streakCount').textContent = State.activity.streak || 0;
+  $('#streakMiniCount').textContent = State.activity.streak || 0;
+}
+
+/* ===================== GENERIC MODAL ===================== */
+function iconSvg(kind){
+  if(kind==='success') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  if(kind==='error') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+  if(kind==='gold') return '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.6L21 9l-5.2 4.4L17.4 21 12 17l-5.4 4 1.6-7.6L3 9l6.4-.4z"/></svg>';
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+}
+function showModal(opts){
+  const overlay = $('#modalOverlay');
+  const box = $('#modalBox');
+  box.innerHTML = `
+    <div class="modal-icon ${opts.tone||'info'}">${iconSvg(opts.icon||opts.tone||'info')}</div>
+    <h3>${escapeHtml(opts.title||'')}</h3>
+    <p>${escapeHtml(opts.message||'')}</p>
+    <div class="modal-actions">
+      ${opts.secondaryLabel ? `<button class="btn btn-ghost" id="modalSecondary">${escapeHtml(opts.secondaryLabel)}</button>` : ''}
+      <button class="btn btn-primary" id="modalPrimary">${escapeHtml(opts.primaryLabel||'حسنًا')}</button>
+    </div>
+  `;
+  overlay.classList.add('show');
+  $('#modalPrimary').addEventListener('click', ()=>{
+    closeModal();
+    if(opts.onPrimary) opts.onPrimary();
+  });
+  const sec = $('#modalSecondary');
+  if(sec){
+    sec.addEventListener('click', ()=>{
+      closeModal();
+      if(opts.onSecondary) opts.onSecondary();
+    });
+  }
+}
+function closeModal(){ $('#modalOverlay').classList.remove('show'); }
+$('#modalOverlay').addEventListener('click', function(e){ if(e.target === this) closeModal(); });
+
+/* ===================== LESSON SELECTOR SHEET ===================== */
+function openLessonSheet(){
+  renderLessonSheetList();
+  updateStatsHeader();
+  $('#lessonSheetOverlay').classList.add('show');
+}
+function closeLessonSheet(){ $('#lessonSheetOverlay').classList.remove('show'); }
+$('#btnOpenLessons').addEventListener('click', openLessonSheet);
+$('#lessonPickerTrigger').addEventListener('click', openLessonSheet);
+$('#lessonSheetOverlay').addEventListener('click', function(e){ if(e.target === this) closeLessonSheet(); });
+
+function renderLessonSheetList(list){
+  const lessons = list || State.lessons;
+  const wrap = $('#lessonListWrap');
+  if(!lessons.length){
+    wrap.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><div>لا توجد نتائج مطابقة</div></div>';
+    return;
+  }
+  wrap.innerHTML = lessons.map((l,i)=>{
+    const preview = escapeHtml(l.rus.split(/\r?\n/)[0].slice(0,42));
+    const mastered = isLessonMastered(l.id);
+    const isCurrent = State.currentLesson && State.currentLesson.id === l.id;
+    const numClass = mastered ? 'done' : '';
+    const numContent = mastered ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><polyline points="20 6 9 17 4 12"/></svg>' : (l._idx+1);
+    return `<div class="lesson-row ${isCurrent?'current':''}" data-idx="${l._idx}">
+      <div class="lesson-num ${numClass}">${numContent}</div>
+      <div class="lesson-info">
+        <div class="lid rus">${escapeHtml(l.id)}</div>
+        <div class="lpreview rus">${preview}${l.rus.length>42?'…':''}</div>
+      </div>
+      <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>`;
+  }).join('');
+  $all('.lesson-row', wrap).forEach(row=>{
+    row.addEventListener('click', ()=>{
+      const idx = Number(row.dataset.idx);
+      const lesson = State.lessons.find(l=>l._idx===idx);
+      closeLessonSheet();
+      openLesson(lesson);
+    });
+  });
+}
+$('#lessonSearch').addEventListener('input', function(){
+  const q = this.value.trim().toLowerCase();
+  if(!q){ renderLessonSheetList(State.lessons); return; }
+  const filtered = State.lessons.filter(l =>
+    l.id.toLowerCase().includes(q) || l.rus.toLowerCase().includes(q) || l.ara.includes(q)
+  );
+  renderLessonSheetList(filtered);
+});
+
+/* ===================== LESSON DETAIL ===================== */
+function openLesson(lesson){
+  State.currentLesson = lesson;
+  $('#detailTitleText').textContent = lesson.id;
+  $('#detailSubtitle').textContent = 'الدرس ' + (lesson._idx+1) + ' من ' + State.lessons.length;
+  renderTranscript(lesson);
+  switchDetailTab('transcript');
+  loadAudioForLesson(lesson);
+  updateScorePill();
+  startQuizSession(lesson);
+}
+
+/* ---- Unified Conversational Card Timeline (transcript) ---- */
+function renderTranscript(lesson){
+  const rusLines = splitLinesStrict(lesson.rus);
+  const araLines = splitLinesStrict(lesson.ara);
+  const wrap = $('#pane-transcript');
+
+  let blocks;
+  if(rusLines.length > 1 && rusLines.length === araLines.length){
+    blocks = rusLines.map((r,i)=> ({ rus:[r], ara:[araLines[i]] }));
+  }else{
+    blocks = [{ rus: rusLines, ara: araLines }];
+  }
+
+  let html = '';
+  blocks.forEach((b, i)=>{
+    html += `<div class="timeline-item">
+      <div class="timeline-dot">${i+1}</div>
+      <div class="convo-card">
+        <div class="rus-part">${b.rus.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</div>
+        <div class="divider"></div>
+        <div class="ara-part">${b.ara.map(p=>`<p>${escapeHtml(p)}</p>`).join('')}</div>
+      </div>
+    </div>`;
+  });
+  wrap.innerHTML = html || '<div class="empty-state">لا يوجد نص لهذا الدرس</div>';
+}
+
+$('#detailSegmented').addEventListener('click', function(e){
+  const btn = e.target.closest('button[data-tab]');
+  if(!btn) return;
+  switchDetailTab(btn.dataset.tab);
+});
+function switchDetailTab(tab){
+  $all('#detailSegmented button').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  ['transcript','audio','quiz'].forEach(t=>{
+    $('#pane-'+t).style.display = (t===tab) ? '' : 'none';
+  });
+}
+
+/* ===================== INDEXEDDB — LOCAL AUDIO STORAGE ===================== */
+const IDB_NAME = 'tochkaru_audio';
+const IDB_STORE = 'tracks';
+let _idb = null;
+
+function openIDB(){
+  if(_idb) return Promise.resolve(_idb);
+  return new Promise((res, rej)=>{
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(IDB_STORE);
+    req.onsuccess = e => { _idb = e.target.result; res(_idb); };
+    req.onerror = () => rej(req.error);
+  });
+}
+function idbPut(key, value){
+  return openIDB().then(db => new Promise((res, rej)=>{
+    const tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).put(value, key);
+    tx.oncomplete = () => res();
+    tx.onerror = () => rej(tx.error);
+  }));
+}
+function idbGet(key){
+  return openIDB().then(db => new Promise((res, rej)=>{
+    const req = db.transaction(IDB_STORE).objectStore(IDB_STORE).get(key);
+    req.onsuccess = () => res(req.result || null);
+    req.onerror = () => rej(req.error);
+  }));
+}
+function idbDelete(key){
+  return openIDB().then(db => new Promise((res, rej)=>{
+    const tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).delete(key);
+    tx.oncomplete = () => res();
+    tx.onerror = () => rej(tx.error);
+  }));
+}
+
+/* ===================== AUDIO PLAYER (auto-sourced, synced seek bar) ===================== */
+const audioEl = $('#audioEl');
+let isPlaying = false;
+let seekRafId = null;
+let _currentBlobUrl = null;   // track so we can revoke it
+
+function slugify(str){
+  return String(str||'').trim().toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '-')
+    .replace(/^-+|-+$/g, '');
+}
+function resolveAudioSrc(lesson){
+  if(lesson.audio) return lesson.audio;
+  return 'audio/' + slugify(lesson.rawId) + '.mp3';
+}
+
+function updateSeekUI(pct){
+  pct = Math.min(100, Math.max(0, pct));
+  const pctStr = pct.toFixed(2) + '%';
+  $('#seekFill').style.width = pctStr;
+  $('#seekKnob').style.left = pctStr;
+}
+function syncSeekFromAudio(){
+  if(audioEl.duration && isFinite(audioEl.duration)){
+    updateSeekUI((audioEl.currentTime / audioEl.duration) * 100);
+    $('#curTime').textContent = formatTime(audioEl.currentTime);
+  }
+}
+function seekLoop(){
+  if(!audioEl.paused && !audioEl.ended){
+    syncSeekFromAudio();
+    seekRafId = requestAnimationFrame(seekLoop);
+  }
+}
+function startSeekLoop(){ cancelAnimationFrame(seekRafId); seekRafId = requestAnimationFrame(seekLoop); }
+function stopSeekLoop(){ cancelAnimationFrame(seekRafId); seekRafId = null; }
+
+function resetAudioPlayer(){
+  stopSeekLoop();
+  audioEl.pause();
+  isPlaying = false;
+  setPlayIcon(false);
+  updateSeekUI(0);
+  $('#curTime').textContent = '0:00';
+  $('#durTime').textContent = '0:00';
+  $all('.speed-chip').forEach(c=>c.classList.toggle('active', c.dataset.speed==='1'));
+  audioEl.playbackRate = 1;
+  $('#playerWrap').classList.remove('ready');
+  $('#audioUnavailable').classList.remove('show');
+  $('#audioLoading').classList.add('show');
+  if(_currentBlobUrl){ URL.revokeObjectURL(_currentBlobUrl); _currentBlobUrl = null; }
+}
+
+function setAudioSrc(src){
+  audioEl.src = src;
+  audioEl.load();
+}
+
+function loadAudioForLesson(lesson){
+  resetAudioPlayer();
+  refreshUploadUI(lesson);
+
+  // Check IndexedDB for a locally-uploaded track first
+  idbGet('audio:' + lesson.id).then(stored => {
+    if(stored && stored.blob){
+      _currentBlobUrl = URL.createObjectURL(stored.blob);
+      setAudioSrc(_currentBlobUrl);
+    } else {
+      setAudioSrc(resolveAudioSrc(lesson));
+    }
+  }).catch(()=>{
+    setAudioSrc(resolveAudioSrc(lesson));
+  });
+}
+
+/* ---- Upload UI wiring ---- */
+function refreshUploadUI(lesson){
+  const banner = $('#uploadStoredBanner');
+  const nameEl = $('#uploadStoredName');
+  idbGet('audio:' + lesson.id).then(stored => {
+    if(stored && stored.blob){
+      banner.style.display = '';
+      nameEl.textContent = stored.name || 'ملف محفوظ';
+    } else {
+      banner.style.display = 'none';
+    }
+  }).catch(()=>{ banner.style.display = 'none'; });
+}
+
+function handleAudioFileUpload(file){
+  if(!file || !State.currentLesson) return;
+  if(!file.type.startsWith('audio/')){
+    toast('الملف المختار ليس ملف صوتي'); return;
+  }
+  const lessonId = State.currentLesson.id;
+  idbPut('audio:' + lessonId, { blob: file, name: file.name }).then(()=>{
+    toast('✓ تم حفظ الصوت لهذا الدرس');
+    loadAudioForLesson(State.currentLesson);
+  }).catch(()=>{ toast('تعذّر حفظ الملف'); });
+}
+
+// File input
+$('#uploadInput').addEventListener('change', function(){
+  if(this.files && this.files[0]) handleAudioFileUpload(this.files[0]);
+  this.value = '';
+});
+
+// Drag & drop
+const dz = $('#uploadDropzone');
+dz.addEventListener('dragover', e=>{ e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', ()=>{ dz.classList.remove('drag-over'); });
+dz.addEventListener('drop', e=>{
+  e.preventDefault(); dz.classList.remove('drag-over');
+  const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  if(f) handleAudioFileUpload(f);
+});
+
+// Delete stored audio
+$('#uploadDelBtn').addEventListener('click', ()=>{
+  if(!State.currentLesson) return;
+  idbDelete('audio:' + State.currentLesson.id).then(()=>{
+    toast('تم حذف الصوت المحفوظ');
+    loadAudioForLesson(State.currentLesson);
+  });
+});
+audioEl.addEventListener('loadedmetadata', ()=>{
+  $('#audioLoading').classList.remove('show');
+  $('#audioUnavailable').classList.remove('show');
+  $('#playerWrap').classList.add('ready');
+  if(isFinite(audioEl.duration)){
+    $('#durTime').textContent = formatTime(audioEl.duration);
+  }else{
+    const fix = function(){
+      audioEl.removeEventListener('timeupdate', fix);
+      audioEl.currentTime = 0;
+      $('#durTime').textContent = formatTime(audioEl.duration);
+    };
+    audioEl.addEventListener('timeupdate', fix);
+    audioEl.currentTime = 1e7;
+  }
+});
+audioEl.addEventListener('error', ()=>{
+  $('#audioLoading').classList.remove('show');
+  $('#playerWrap').classList.remove('ready');
+  $('#audioUnavailable').classList.add('show');
+});
+audioEl.addEventListener('durationchange', ()=>{
+  if(isFinite(audioEl.duration)) $('#durTime').textContent = formatTime(audioEl.duration);
+});
+audioEl.addEventListener('timeupdate', syncSeekFromAudio);
+audioEl.addEventListener('seeked', syncSeekFromAudio);
+audioEl.addEventListener('play', ()=>{ isPlaying = true; setPlayIcon(true); startSeekLoop(); });
+audioEl.addEventListener('pause', ()=>{ isPlaying = false; setPlayIcon(false); stopSeekLoop(); syncSeekFromAudio(); });
+audioEl.addEventListener('ended', ()=>{ isPlaying = false; setPlayIcon(false); stopSeekLoop(); updateSeekUI(100); });
+
+function formatTime(s){
+  if(!isFinite(s)) return '0:00';
+  const m = Math.floor(s/60);
+  const sec = Math.floor(s%60);
+  return m + ':' + (sec<10?'0':'')+sec;
+}
+function setPlayIcon(playing){
+  $('#playIcon').innerHTML = playing
+    ? '<rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect>'
+    : '<path d="M8 5v14l11-7z"></path>';
+}
+$('#playBtn').addEventListener('click', ()=>{
+  if(!audioEl.src){ toast('لا يوجد صوت محمّل لهذا الدرس'); return; }
+  if(isPlaying){ audioEl.pause(); } else { audioEl.play().catch(()=>{ toast('تعذّر تشغيل الصوت'); }); }
+});
+
+function seekFromEvent(e){
+  const bar = $('#seekBar');
+  const rect = bar.getBoundingClientRect();
+  const clientX = (e.touches ? e.touches[0].clientX : e.clientX);
+  let pct = ((clientX - rect.left) / rect.width) * 100;
+  pct = Math.min(100, Math.max(0, pct));
+  updateSeekUI(pct);
+  if(audioEl.duration && isFinite(audioEl.duration)){
+    audioEl.currentTime = (pct/100) * audioEl.duration;
+  }
+}
+const seekBar = $('#seekBar');
+let seeking = false;
+seekBar.addEventListener('pointerdown', (e)=>{ seeking = true; seekBar.setPointerCapture(e.pointerId); seekFromEvent(e); });
+seekBar.addEventListener('pointermove', (e)=>{ if(seeking) seekFromEvent(e); });
+seekBar.addEventListener('pointerup', ()=>{ seeking = false; });
+seekBar.addEventListener('pointercancel', ()=>{ seeking = false; });
+
+$('#speedRow').addEventListener('click', (e)=>{
+  const chip = e.target.closest('.speed-chip');
+  if(!chip) return;
+  $all('.speed-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  audioEl.playbackRate = parseFloat(chip.dataset.speed);
+});
+
+/* ===================== SCORE / MASTERY / MISTAKE BUFFER ===================== */
+function currentScoreKey(){ return State.currentLesson ? State.currentLesson.id : '_'; }
+function updateScorePill(){
+  const key = currentScoreKey();
+  const s = State.scores[key] || {correct:0, total:0};
+  $('#scoreText').textContent = s.correct + ' / ' + s.total;
+}
+function recordAnswer(type, correct){
+  const key = currentScoreKey();
+  const wasMastered = isLessonMastered(key);
+  if(!State.scores[key]) State.scores[key] = {correct:0,total:0};
+  State.scores[key].total++;
+  if(correct) State.scores[key].correct++;
+  updateScorePill();
+  saveScores();
+  if(State.session){
+    if(correct) State.session.correct++;
+    State.session.results.push({ type, correct });
+  }
+  const nowMastered = isLessonMastered(key);
+  if(!wasMastered && nowMastered){
+    updateStatsHeader();
+    setTimeout(()=>{
+      showModal({ tone:'gold', icon:'gold', title:'أتقنت هذا الدرس! 🏆', message:'أداء رائع! واصل بنفس الحماس لإتقان باقي الدروس.', primaryLabel:'رائع' });
+    }, 300);
+  }
+}
+function addMistake(lessonId, entry){
+  if(!State.mistakes[lessonId]) State.mistakes[lessonId] = [];
+  const key = entry.type + '|' + normalizeWord(entry.answer);
+  const exists = State.mistakes[lessonId].some(m => (m.type+'|'+normalizeWord(m.answer)) === key);
+  if(!exists){
+    entry.uid = uid();
+    State.mistakes[lessonId].push(entry);
+    saveMistakes();
+  }
+}
+function removeMistake(lessonId, mUid){
+  if(!State.mistakes[lessonId]) return;
+  State.mistakes[lessonId] = State.mistakes[lessonId].filter(m => m.uid !== mUid);
+  saveMistakes();
+}
+
+/* ===================== PAGED QUIZ SESSION ENGINE (static pre-baked questions) ===================== */
+function startQuizSession(lesson){
+  const qs = lesson.questions || [];
+  State.session = { index:1, total: qs.length, correct:0, results:[] };
+  State.quizData.current = null;
+  renderQuestion();
+}
+function currentQuestion(){
+  const s = State.session;
+  if(!s || !State.currentLesson) return null;
+  return State.currentLesson.questions[s.index-1] || null;
+}
+function renderQuestion(){
+  const body = $('#quizBody');
+  const q = currentQuestion();
+  if(!q){
+    body.innerHTML = '<div class="empty-state">لا توجد تمارين لهذا الدرس بعد</div>';
+    return;
+  }
+  State.quizData.current = { answered:false };
+  if(q.type === 'grammar') paintGrammar(q);
+  else if(q.type === 'sorting') paintSorting(q);
+  else if(q.type === 'dictation') paintDictation(q);
+}
+function advanceSession(){
+  const s = State.session;
+  if(!s) return;
+  if(s.index >= s.total){ finishSession(); return; }
+  s.index++;
+  renderQuestion();
+}
+function progressHeaderHtml(){
+  const s = State.session;
+  if(!s) return '';
+  const pct = s.total ? Math.round(((s.index-1)/s.total)*100) : 0;
+  return `<div class="quiz-progress">
+    <div class="quiz-progress-label">السؤال ${s.index} من اجمالي ${s.total}</div>
+    <div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+  </div>`;
+}
+function typeTagHtml(type){
+  return `<div style="text-align:center"><span class="question-type-tag">${TYPE_LABELS[type]||type}</span></div>`;
+}
+function explanationHtml(q, show){
+  if(!q.explanation) return '';
+  return `<div class="explanation-wrap ${show?'open':''}"><div class="explanation-inner"><div class="explanation-card">
+      <div class="explanation-label">💡 توضيح</div>
+      <div class="explanation-text ara">${escapeHtml(q.explanation)}</div>
+    </div></div></div>`;
+}
+function nextButtonHtml(answered){
+  const s = State.session;
+  const isLast = s && s.index >= s.total;
+  return `<div class="quiz-actions">
+    <button class="btn btn-primary" id="quizNextBtn" ${answered ? '' : 'disabled'}>${isLast ? 'إنهاء الجولة' : 'السؤال التالي'}</button>
+  </div>`;
+}
+function wireNextButton(){
+  const btn = $('#quizNextBtn');
+  if(btn) btn.addEventListener('click', ()=>{ if(!btn.disabled) advanceSession(); });
+}
+
+/* ---- Type: grammar (multiple choice) ---- */
+function paintGrammar(q){
+  const d = State.quizData.current;
+  const body = $('#quizBody');
+  const sentenceHtml = escapeHtml(q.sentence).replace(/_{3,}/, '<span class="blank-tag">____</span>');
+  body.innerHTML = `
+    ${progressHeaderHtml()}
+    ${typeTagHtml('grammar')}
+    <div class="prompt-sentence">${sentenceHtml}</div>
+    <div class="choice-grid" id="grammarChoices">
+      ${q.choices.map(c=>{
+        let cls = 'choice-card';
+        if(d.answered){
+          cls += ' disabled';
+          if(c === q.answer) cls += ' correct';
+          else if(c === d.chosenWrong) cls += ' wrong';
+        }
+        return `<div class="${cls}" data-word="${escapeHtml(c)}">${escapeHtml(c)}</div>`;
+      }).join('')}
+    </div>
+    <div class="feedback-banner ${d.answered?'show '+(d.isCorrect?'ok':'bad'):''}">
+      ${d.answered ? (d.isCorrect?okIcon()+'<span>إجابة صحيحة! 👏</span>':badIcon()+'<span>إجابة خاطئة، الصحيح: '+escapeHtml(q.answer)+'</span>') : ''}
+    </div>
+    ${explanationHtml(q, d.answered && !d.isCorrect)}
+    ${nextButtonHtml(d.answered)}
+  `;
+  if(!d.answered){
+    $('#grammarChoices').addEventListener('click', function(e){
+      if(d.answered) return;
+      const card = e.target.closest('.choice-card');
+      if(!card) return;
+      const chosen = card.dataset.word;
+      d.answered = true;
+      d.chosenWrong = chosen;
+      d.isCorrect = chosen === q.answer;
+      if(!d.isCorrect){
+        addMistake(State.currentLesson.id, { type:'word', context: q.sentence, answer: q.answer, explanation: q.explanation });
+      }
+      recordAnswer('grammar', d.isCorrect);
+      paintGrammar(q);
+    });
+  }
+  wireNextButton();
+}
+
+/* ---- Type: sorting (drag/tap-to-order capsules) ---- */
+function paintSorting(q){
+  const d = State.quizData.current;
+  const body = $('#quizBody');
+  if(!d.bank){
+    d.bank = shuffle(q.words.map((w,i)=>({w, uid:'w'+i+'_'+Math.random().toString(36).slice(2,7)})));
+    d.placed = [];
+  }
+  const bankItems = d.bank.filter(it => !d.placed.find(p=>p.uid===it.uid));
+  const canCheck = !d.answered && d.placed.length === q.answer.length;
+  body.innerHTML = `
+    ${progressHeaderHtml()}
+    ${typeTagHtml('sorting')}
+    <div class="prompt-sentence" style="direction:rtl;font-size:14px;font-weight:600;color:var(--text-2);padding:14px">رتّب الكلمات لتكوين الجملة الصحيحة</div>
+    <div class="answer-row capsule-row ${d.answered?'locked':''}" id="sortAnswer">
+      ${d.placed.length ? d.placed.map((it,i)=>{
+        let cls = 'capsule placed';
+        if(d.answered){ cls = 'capsule ' + (it.w===q.answer[i] ? 'correct' : 'wrong'); }
+        return `<div class="${cls}" data-uid="${it.uid}" data-zone="answer">${escapeHtml(it.w)}</div>`;
+      }).join('')
+        : '<span style="color:var(--text-3);font-size:13px;padding:8px 4px">اضغط على الكلمات أدناه لترتيبها هنا…</span>'}
+    </div>
+    <div class="bank-row capsule-row ${d.answered?'locked':''}" id="sortBank">
+      ${bankItems.map(it=>`<div class="capsule" data-uid="${it.uid}" data-zone="bank">${escapeHtml(it.w)}</div>`).join('')}
+    </div>
+    <div class="feedback-banner ${d.answered?'show '+(d.isCorrect?'ok':'bad'):''}">
+      ${d.answered ? (d.isCorrect?okIcon()+'<span>ممتاز! الترتيب صحيح 🎉</span>':badIcon()+`<span class="rus" style="font-weight:600">الصحيح: ${escapeHtml(q.answer.join(' '))}</span>`) : ''}
+    </div>
+    ${explanationHtml(q, d.answered && !d.isCorrect)}
+    <div class="quiz-actions">
+      <button class="btn btn-ghost btn-sm" id="sortReset" style="flex:1" ${d.answered?'disabled':''}>إعادة تعيين</button>
+      <button class="btn btn-primary" id="sortCheck" style="flex:2" ${canCheck?'':'disabled'}>تحقّق</button>
+    </div>
+    ${nextButtonHtml(d.answered)}
+  `;
+  if(!d.answered){
+    $('#sortAnswer').addEventListener('click', e=>{
+      const cap = e.target.closest('.capsule[data-zone="answer"]');
+      if(!cap) return;
+      d.placed = d.placed.filter(p=>p.uid!==cap.dataset.uid);
+      paintSorting(q);
+    });
+    $('#sortBank').addEventListener('click', e=>{
+      const cap = e.target.closest('.capsule[data-zone="bank"]');
+      if(!cap) return;
+      const item = d.bank.find(b=>b.uid===cap.dataset.uid);
+      d.placed.push(item);
+      paintSorting(q);
+    });
+    $('#sortReset').addEventListener('click', ()=>{ d.placed = []; paintSorting(q); });
+    const checkBtn = $('#sortCheck');
+    if(checkBtn) checkBtn.addEventListener('click', ()=>{
+      if(d.answered) return;
+      const userSeq = d.placed.map(p=>p.w);
+      d.isCorrect = userSeq.length===q.answer.length && userSeq.every((w,i)=>w===q.answer[i]);
+      d.answered = true;
+      if(!d.isCorrect){
+        userSeq.forEach((w,i)=>{
+          if(w !== q.answer[i]){
+            const context = q.answer.map((cw,ci)=> ci===i ? '____' : cw).join(' ');
+            addMistake(State.currentLesson.id, { type:'word', context, answer: q.answer[i], explanation: q.explanation });
+          }
+        });
+        $('#quizBody').classList.add('shake');
+        setTimeout(()=>$('#quizBody').classList.remove('shake'), 500);
+      }
+      recordAnswer('sorting', d.isCorrect);
+      paintSorting(q);
+    });
+  }
+  wireNextButton();
+}
+
+/* ---- Type: dictation (typing) ---- */
+function paintDictation(q){
+  const d = State.quizData.current;
+  const body = $('#quizBody');
+  const sentenceHtml = escapeHtml(q.sentence).replace(/_{3,}/, '<span class="blank-tag">____</span>');
+  body.innerHTML = `
+    ${progressHeaderHtml()}
+    ${typeTagHtml('dictation')}
+    <div class="prompt-sentence">${sentenceHtml}</div>
+    <div class="dictation-input-wrap">
+      <input type="text" class="dictation-input ${d.answered?(d.isCorrect?'correct':'wrong'):''}" id="dictateInput" placeholder="اكتب الكلمة المفقودة هنا" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" ${d.answered?'disabled':''} value="${d.answered?escapeHtml(d.userValue||''):''}">
+    </div>
+    <div class="feedback-banner ${d.answered?'show '+(d.isCorrect?'ok':'bad'):''}">
+      ${d.answered ? (d.isCorrect?okIcon()+'<span class="rus">صحيح تمامًا! ✍️</span>':badIcon()+'<span class="rus">الصحيح هو: '+escapeHtml(q.answer)+'</span>') : ''}
+    </div>
+    ${explanationHtml(q, d.answered && !d.isCorrect)}
+    <div class="quiz-actions">
+      <button class="btn btn-primary" id="dictateCheck" style="flex:1" ${d.answered?'disabled':''}>تحقّق</button>
+    </div>
+    ${nextButtonHtml(d.answered)}
+  `;
+  const input = $('#dictateInput');
+  function doCheck(){
+    if(d.answered) return;
+    d.userValue = input.value;
+    d.isCorrect = normalizeWord(input.value) === normalizeWord(q.answer) && input.value.trim().length>0;
+    d.answered = true;
+    if(!d.isCorrect){
+      addMistake(State.currentLesson.id, { type:'word', context: q.sentence, answer: q.answer, explanation: q.explanation });
+      $('#quizBody').classList.add('shake');
+      setTimeout(()=>$('#quizBody').classList.remove('shake'), 500);
+    }
+    recordAnswer('dictation', d.isCorrect);
+    paintDictation(q);
+  }
+  if(!d.answered){
+    $('#dictateCheck').addEventListener('click', doCheck);
+    input.addEventListener('keydown', e=>{ if(e.key==='Enter') doCheck(); });
+    setTimeout(()=>input.focus(), 150);
+  }
+  wireNextButton();
+}
+
+/* ---- Session finish: blurred analytical scoreboard modal ---- */
+function finishSession(){
+  const s = State.session;
+  const total = s.total || 1;
+  const pct = Math.round((s.correct/total)*100);
+  const circumference = 2 * Math.PI * 50;
+  const dash = (circumference*pct/100).toFixed(1) + ' ' + circumference.toFixed(1);
+
+  const byType = {};
+  s.results.forEach(r=>{
+    if(!byType[r.type]) byType[r.type] = {correct:0, total:0};
+    byType[r.type].total++;
+    if(r.correct) byType[r.type].correct++;
+  });
+  const breakdownRows = Object.keys(byType).map(t=>
+    `<div class="scoreboard-row"><span class="label">${TYPE_LABELS[t]||t}</span><span class="value">${byType[t].correct} / ${byType[t].total}</span></div>`
+  ).join('');
+
+  const lessonId = State.currentLesson.id;
+  const pendingMistakes = (State.mistakes[lessonId] || []).length;
+  const perfect = pct === 100;
+
+  const box = $('#scoreboardBox');
+  box.innerHTML = `
+    <div class="scoreboard-ring-wrap">
+      <svg viewBox="0 0 110 110">
+        <circle cx="55" cy="55" r="50" fill="none" stroke="var(--border)" stroke-width="7"></circle>
+        <circle cx="55" cy="55" r="50" fill="none" stroke="${perfect?'var(--gold)':'var(--primary)'}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${dash}" transform="rotate(-90 55 55)"></circle>
+      </svg>
+      <div class="scoreboard-ring-label"><div class="pct">${pct}%</div><div class="lbl">نسبة الإجابات الصحيحة</div></div>
+    </div>
+    <h3>${perfect ? 'أداء مثالي! 🌟' : 'انتهت الجولة! 🎉'}</h3>
+    <p>حصلت على <strong style="color:var(--text)">${s.correct} من ${s.total}</strong> إجابات صحيحة في هذا الدرس</p>
+    <div class="scoreboard-breakdown">${breakdownRows}</div>
+    ${pendingMistakes ? `<button class="mistakes-cta" id="scoreboardReviewBtn">🧠 راجع أخطاءك (${pendingMistakes})</button>` : ''}
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="scoreboardRestartBtn">إعادة الجولة</button>
+      <button class="btn btn-primary" id="scoreboardDoneBtn">تم</button>
+    </div>
+  `;
+  const overlay = $('#scoreboardOverlay');
+  overlay.classList.add('show', 'blur-strong');
+
+  $('#scoreboardDoneBtn').addEventListener('click', ()=>{
+    overlay.classList.remove('show','blur-strong');
+  });
+  $('#scoreboardRestartBtn').addEventListener('click', ()=>{
+    overlay.classList.remove('show','blur-strong');
+    startQuizSession(State.currentLesson);
+  });
+  const reviewBtn = $('#scoreboardReviewBtn');
+  if(reviewBtn){
+    reviewBtn.addEventListener('click', ()=>{
+      overlay.classList.remove('show','blur-strong');
+      openMistakeReview();
+    });
+  }
+}
+
+/* ---- Mistake review flashcards (accessible from the scoreboard) ---- */
+let reviewQueue = [];
+let reviewSessionTotal = 0;
+function openMistakeReview(){
+  const lessonId = State.currentLesson.id;
+  reviewQueue = shuffle(State.mistakes[lessonId] || []);
+  reviewSessionTotal = reviewQueue.length;
+  switchDetailTab('quiz');
+  paintReviewQuiz();
+}
+function reviewProgressHtml(){
+  if(!reviewSessionTotal) return '';
+  const done = reviewSessionTotal - reviewQueue.length;
+  const idx = Math.min(reviewSessionTotal, done + 1);
+  const pct = Math.round((done/reviewSessionTotal)*100);
+  return `<div class="quiz-progress">
+    <div class="quiz-progress-label">بطاقة مراجعة ${idx} من اجمالي ${reviewSessionTotal}</div>
+    <div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+  </div>`;
+}
+function paintReviewQuiz(){
+  const body = $('#quizBody');
+  if(!reviewQueue.length){
+    body.innerHTML = `
+      <div class="review-empty">
+        <div class="ok-circle">${okIcon()}</div>
+        <h3>لا توجد أخطاء للمراجعة</h3>
+        <p>أحسنت! كل الأخطاء السابقة في هذا الدرس تم إتقانها.</p>
+      </div>`;
+    return;
+  }
+  const item = reviewQueue[0];
+  body.innerHTML = `
+    ${reviewProgressHtml()}
+    <div class="flashcard">
+      <div class="fc-label">بطاقة مراجعة</div>
+      <div class="fc-context">${escapeHtml(item.context)}</div>
+    </div>
+    <div class="dictation-input-wrap">
+      <input type="text" class="dictation-input" id="reviewInput" placeholder="اكتب الكلمة الصحيحة" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    </div>
+    <div class="feedback-banner" id="reviewFeedback"></div>
+    ${item.explanation ? `<div class="explanation-wrap" id="reviewExplanationWrap"><div class="explanation-inner"><div class="explanation-card"><div class="explanation-label">💡 توضيح</div><div class="explanation-text ara">${escapeHtml(item.explanation)}</div></div></div></div>` : ''}
+    <div class="quiz-actions">
+      <button class="btn btn-primary" id="reviewCheck" style="flex:1">تحقّق</button>
+    </div>
+  `;
+  const input = $('#reviewInput');
+  function doCheck(){
+    const isCorrect = normalizeWord(input.value) === normalizeWord(item.answer);
+    handleReviewAnswer(isCorrect, item);
+  }
+  $('#reviewCheck').addEventListener('click', doCheck);
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter') doCheck(); });
+  setTimeout(()=>input.focus(), 150);
+}
+function handleReviewAnswer(isCorrect, item){
+  const fb = $('#reviewFeedback');
+  fb.classList.add('show');
+  fb.className = 'feedback-banner show ' + (isCorrect?'ok':'bad');
+  fb.innerHTML = (isCorrect?okIcon():badIcon()) + '<span>' + (isCorrect ? 'أحسنت! تم الإتقان ✓' : 'حاول مرة أخرى — الصحيح: ' + escapeHtml(item.answer)) + '</span>';
+  const explWrap = $('#reviewExplanationWrap');
+  if(explWrap && !isCorrect) explWrap.classList.add('open');
+  if(isCorrect){
+    removeMistake(State.currentLesson.id, item.uid);
+    reviewQueue.shift();
+  }else{
+    $('#quizBody').classList.add('shake');
+    setTimeout(()=>$('#quizBody').classList.remove('shake'), 500);
+    reviewQueue.push(reviewQueue.shift());
+  }
+  setTimeout(()=>{
+    if(!reviewQueue.length){
+      updateStatsHeader();
+      showModal({ tone:'success', icon:'success', title:'اكتملت المراجعة! 🎉', message:'أتقنت كل الكلمات التي أخطأت فيها سابقًا في هذا الدرس.', primaryLabel:'تمام' });
+    }
+    paintReviewQuiz();
+  }, isCorrect ? 700 : 1400);
+}
+
+function okIcon(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'; }
+function badIcon(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'; }
+
+/* ===================== SERVICE WORKER ===================== */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{ /* offline-first, fails silently if sw.js absent */ });
+  });
+}
+
+/* ===================== INIT ===================== */
+document.addEventListener('DOMContentLoaded', fetchAndLoadLessons);
+// Fallback in case this script runs after DOMContentLoaded already fired
+if(document.readyState === 'interactive' || document.readyState === 'complete'){
+  fetchAndLoadLessons();
+}
+
+})();
+</script>
+</body>
+</html>
