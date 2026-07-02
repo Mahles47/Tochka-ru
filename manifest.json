@@ -3,17 +3,17 @@
   "name": "Точка Ру - تعلم اللغة الروسية",
   "icons": [
     {
-      "src": "127546.png",
+      "src": "icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "127546.png",
+      "src": "icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "background_color": "#ffffff",
   "display": "standalone",
   "theme_color": "#0057b7",
